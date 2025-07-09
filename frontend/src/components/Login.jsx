@@ -30,9 +30,11 @@ function Login() {
 				{ email, password },
 				{ withCredentials: true }
 			);
-			if(res.status == 200) console.log(res.data.token);
-			document.cookie = `jwt=${token}; path=/; max-age=86400; secure; sameSite=Strict`;
-			console.log(res);
+			if(res.status == 200) 
+			{			
+				console.log(res.data.token);
+				document.cookie = `jwt=${res.data.token}; path=/; max-age=86400; secure; sameSite=Strict`;
+			}
 			// if (res.status === 200 || res.status === 204) {
 			// 	// login();
 			// 	navigate("/profile");
