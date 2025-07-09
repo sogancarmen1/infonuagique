@@ -34,7 +34,7 @@ const CreateAuctionItem = () => {
 
     if (token) {
       try {
-        const response = await axios.post("/api/auctions", formData, {
+        const response = await axios.post("https://infonuagique.onrender.com/api/auctions", formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
