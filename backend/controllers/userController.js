@@ -68,14 +68,13 @@ const loginUser = async (req, res) => {
 			maxAge: 24 * 60 * 60 * 1000,
 			sameSite: "None",
 			secure: true,
-			partitioned: true,
-			domain: "infonuagique-1-5wun.onrender.com"
 		});
 
 		res.status(200).json({
 			id: user._id,
 			username: user.username,
 			email: user.email,
+			token: token
 		});
 	} catch (error) {
 		console.error(error);
