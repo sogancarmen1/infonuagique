@@ -24,12 +24,11 @@ function Signup() {
 	}, [isLoggedIn, navigate]);
 
 	const handleSignup = async (e) => {
-		const API_URL = import.meta.env.VITE_API_URL;
 		e.preventDefault();
 		setLoading(true);
 		try {
 			const res = await axios.post(
-				`${API_URL}/users/register`,
+				`/api/users/register`,
 				{ username, email, password, confirmPassword },
 				{ withCredentials: true }
 			);
