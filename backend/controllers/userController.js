@@ -68,6 +68,7 @@ const loginUser = async (req, res) => {
 			expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
 			sameSite: "None",
 			secure: true,
+			partitionned: true
 		});
 
 		res.status(200).json({
