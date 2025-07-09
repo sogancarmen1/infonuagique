@@ -30,6 +30,7 @@ function Login() {
 				{ email, password },
 				{ withCredentials: true }
 			);
+			if(res.status == 200) console.log(res.data.token);
 			console.log(res);
 			// if (res.status === 200 || res.status === 204) {
 			// 	// login();
