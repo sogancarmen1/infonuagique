@@ -31,7 +31,7 @@ function Login() {
 				{ withCredentials: true }
 			);
 			if (res.status === 200) {
-				login();
+				// login();
 				navigate("/profile");
 			}
 		} catch (err) {
