@@ -15,11 +15,11 @@ function Login() {
 	const { isLoggedIn, login } = useAuth();
 	const { t } = useTranslation();
 
-	useEffect(() => {
-		if (isLoggedIn) {
-			navigate("/profile");
-		}
-	}, [isLoggedIn, navigate]);
+	// useEffect(() => {
+	// 	if (isLoggedIn) {
+	// 		navigate("/profile");
+	// 	}
+	// }, [isLoggedIn, navigate]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -31,7 +31,7 @@ function Login() {
 				{ withCredentials: true }
 			);
 			if (res.status === 200) {
-				login();
+				// login();
 				// navigate("/profile");
 			}
 		} catch (err) {
