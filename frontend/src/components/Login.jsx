@@ -34,10 +34,10 @@ function Login() {
 			{			
 				console.log(res.data.token);
 				document.cookie = `jwt=${res.data.token}; path=/; max-age=86400; secure; sameSite=Strict`;
+				navigate("/profile");
 			}
 			// if (res.status === 200 || res.status === 204) {
 			// 	// login();
-			// 	navigate("/profile");
 			// }
 		} catch (err) {
 			setError(err.response?.data?.message || t("login.error"));
