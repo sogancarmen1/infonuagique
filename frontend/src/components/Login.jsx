@@ -30,10 +30,11 @@ function Login() {
 				{ email, password },
 				{ withCredentials: true }
 			);
-			if (res.status === 200 || res.status === 204) {
-				// login();
-				navigate("/profile");
-			}
+			console.log(res);
+			// if (res.status === 200 || res.status === 204) {
+			// 	// login();
+			// 	navigate("/profile");
+			// }
 		} catch (err) {
 			setError(err.response?.data?.message || t("login.error"));
 			console.error(err);
