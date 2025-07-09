@@ -28,7 +28,7 @@ function Signup() {
 		setLoading(true);
 		try {
 			const res = await axios.post(
-				`/api/users/register`,
+				`https://infonuagique.onrender.com/api/users/register`,
 				{ username, email, password, confirmPassword },
 				{ withCredentials: true }
 			);
