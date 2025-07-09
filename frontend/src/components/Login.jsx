@@ -30,7 +30,7 @@ function Login() {
 				{ email, password },
 				{ withCredentials: true }
 			);
-			if (res.status === 200) {
+			if (res.status === 200 || res.status === 204) {
 				// login();
 				navigate("/profile");
 			}
