@@ -32,7 +32,7 @@ function Login() {
 			);
 			if (res.status === 200) {
 				login();
-				navigate("/profile");
+				// navigate("/profile");
 			}
 		} catch (err) {
 			setError(err.response?.data?.message || t("login.error"));
