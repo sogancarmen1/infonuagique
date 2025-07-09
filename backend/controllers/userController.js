@@ -65,10 +65,9 @@ const loginUser = async (req, res) => {
 
 		res.cookie("jwt", token, {
 			httpOnly: true,
-			expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+			maxAge: new Date(Date.now() + 24 * 60 * 60 * 1000),
 			sameSite: "None",
 			secure: true,
-			partitionned: true
 		});
 
 		res.status(200).json({
