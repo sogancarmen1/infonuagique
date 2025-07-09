@@ -155,7 +155,6 @@ function Profile() {
 
 	return (
 		<div className="min-h-screen px-4 py-12 text-gray-300 bg-gray-900 sm:px-6 lg:px-8">
-		<div>Bonjour tout le monde</div>
 			<div className="mx-auto max-w-7xl">
 				<div className="overflow-hidden bg-gray-800 rounded-lg shadow-xl">
 					<div className="p-6 sm:p-10">
