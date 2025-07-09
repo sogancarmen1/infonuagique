@@ -63,12 +63,15 @@ const loginUser = async (req, res) => {
 			expiresIn: "1d",
 		});
 
-		res.cookie("jwt", token, {
-			httpOnly: true,
-			maxAge: 24 * 60 * 60 * 1000,
-			sameSite: "None",
-			secure: true,
-		});
+		const cookie = `Authorization=${token}; Path=/; HttpOnly; Max-Age=${60 * 60}; SameSite=None; Secure=true; Partitioned`
+
+		res.setHeader("Set-Cookie", [cookie]);
+		// res.cookie("jwt", token, {
+		// 	httpOnly: true,
+		// 	maxAge: 24 * 60 * 60 * 1000,
+		// 	sameSite: "None",
+		// 	secure: true,
+		// });
 
 		res.status(200).json({
 			id: user._id,
