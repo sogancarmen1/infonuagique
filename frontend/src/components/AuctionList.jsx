@@ -11,17 +11,28 @@ function AuctionList() {
 	const [searchResults, setSearchResults] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(0);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
 	const { t } = useTranslation();
 
 	useEffect(() => {
 		const fetchAuctionItems = async () => {
-			const res = await axios.get("/api/auctions");
-			setAuctionItems(res.data);
-			setSearchResults(res.data);
-			setTotalPages(Math.ceil(res.data.length / ITEMS_PER_PAGE));
+			setLoading(true);
+			setError("");
+			try {
+				const res = await axios.get("/api/auctions");
+				setAuctionItems(res.data);
+				setSearchResults(res.data);
+				setTotalPages(Math.ceil(res.data.length / ITEMS_PER_PAGE));
+			} catch (err) {
+				setError(t('auction.error'));
+				console.error(err);
+			} finally {
+				setLoading(false);
+			}
 		};
 		fetchAuctionItems();
-	}, []);
+	}, [t]);
 
 	useEffect(() => {
 		const filterItems = () => {
@@ -85,45 +96,61 @@ function AuctionList() {
 					className="p-3 border border-gray-700 rounded-lg bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
 				/>
 			</div>
+			{error && <div className="text-red-500 text-center mb-4">{error}</div>}
 			<ul className="space-y-4">
-				{paginatedItems.map((item) => (
-					<li
-  key={item._id}
-  className="border border-gray-700 rounded-lg p-4 bg-gray-800 shadow-md"
->
-  <div className="flex flex-row gap-4">
-    {/* Texte à gauche */}
-    <div className="flex-1">
-      <Link
-        to={`/auction/${item._id}`}
-        className="text-indigo-400 hover:underline text-lg font-semibold"
-      >
-        {item.title}
-      </Link>
-      <p className="text-gray-300 mt-2">
-        <b>{item.description}</b>
-      </p>
-      <p className="text-gray-400 mt-2">
-        <b>{t("auctions.starting_bid")}</b> ${item.startingBid}
-      </p>
-      <p className="text-gray-400 mt-2">
-        <b>{t("auctions.end_date")}</b>{" "}
-        {new Date(item.endDate).toLocaleDateString()}
-      </p>
-    </div>
-
-    {/* Image à droite */}
-    <div className="w-48 h-48">
-      <img
-        src={item.imageurl}
-        alt={item.title}
-        className="w-full h-full object-cover rounded"
-      />
-    </div>
-  </div>
-</li>
-
-				))}
+				{loading ? (
+					Array.from({ length: 3 }).map((_, idx) => (
+						<li key={idx} className="border border-gray-700 rounded-lg p-4 bg-gray-800 shadow-md animate-pulse">
+							<div className="flex flex-row gap-4">
+								<div className="flex-1">
+									<div className="h-6 bg-gray-700 rounded w-1/2 mb-2"></div>
+									<div className="h-4 bg-gray-700 rounded w-3/4 mb-2"></div>
+									<div className="h-4 bg-gray-700 rounded w-1/3 mb-2"></div>
+									<div className="h-4 bg-gray-700 rounded w-1/4"></div>
+								</div>
+								<div className="w-48 h-48 bg-gray-700 rounded"></div>
+							</div>
+						</li>
+					))
+				) : (
+					paginatedItems.map((item) => (
+						<li
+							key={item._id}
+							className="border border-gray-700 rounded-lg p-4 bg-gray-800 shadow-md"
+						>
+							<div className="flex flex-row gap-4">
+								{/* Texte à gauche */}
+								<div className="flex-1">
+									<Link
+										to={`/auction/${item._id}`}
+										className="text-indigo-400 hover:underline text-lg font-semibold"
+									>
+										{item.title}
+									</Link>
+									<p className="text-gray-300 mt-2">
+										<b>{item.description}</b>
+									</p>
+									<p className="text-gray-400 mt-2">
+										<b>{t("auctions.starting_bid")}</b> ${item.startingBid}
+									</p>
+									<p className="text-gray-400 mt-2">
+										<b>{t("auctions.end_date")}</b>{" "}
+										{new Date(item.endDate).toLocaleDateString()}
+									</p>
+								</div>
+								{/* Image à droite */}
+								<div className="w-48 h-48">
+									<img
+										src={item.imageurl}
+										alt={item.title}
+										className="w-full h-full object-cover rounded"
+										loading="lazy"
+									/>
+								</div>
+							</div>
+						</li>
+					))
+				)}
 			</ul>
 			<div className="mt-6 flex justify-between items-center">
 				<button
@@ -131,7 +158,7 @@ function AuctionList() {
 					className={`bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
 						currentPage === 1 ? "cursor-not-allowed opacity-50" : ""
 					}`}
-					disabled={currentPage === 1}
+					disabled={currentPage === 1 || loading}
 				>
 					{t("auctions.previous")}
 				</button>
@@ -145,7 +172,7 @@ function AuctionList() {
 							? "cursor-not-allowed opacity-50"
 							: ""
 					}`}
-					disabled={totalPages === 0 || currentPage === totalPages}
+					disabled={totalPages === 0 || currentPage === totalPages || loading}
 				>
 					{t("auctions.next")}
 				</button>

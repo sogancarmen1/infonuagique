@@ -2,11 +2,16 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BidForm = () => {
 	const { id } = useParams();
 	const [auctionItem, setAuctionItem] = useState(null);
 	const [bidAmount, setBidAmount] = useState("");
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
+	const [optimisticSuccess, setOptimisticSuccess] = useState(false);
 	const navigate = useNavigate();
 	const { t } = useTranslation();
 
@@ -22,6 +27,15 @@ const BidForm = () => {
 
 	const handleBid = async (e) => {
 		e.preventDefault();
+		setLoading(true);
+		setError("");
+		setOptimisticSuccess(false);
+		// Optimistically show success and redirect
+		setOptimisticSuccess(true);
+		setTimeout(() => {
+			toast.success(t('auction.bid_success') || 'Bid placed! Redirecting...');
+			navigate(`/auction/${id}`);
+		}, 500); // Short delay for user feedback
 		try {
 			const token = document.cookie
 				.split("; ")
@@ -32,9 +46,14 @@ const BidForm = () => {
 				{ auctionItemId: id, bidAmount },
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
-			navigate(`/auction/${id}`);
+			// No-op: already redirected
 		} catch (err) {
+			setOptimisticSuccess(false);
+			setError(t('auction.error'));
+			toast.error(t('auction.error'));
 			console.error(err);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -42,6 +61,7 @@ const BidForm = () => {
 
 	return (
 		<div className="max-w-lg p-6 mx-auto mt-12 bg-white rounded-lg shadow-md">
+			<ToastContainer position="top-center" autoClose={2000} />
 			<h2 className="mb-6 text-3xl font-extrabold text-gray-800">
 				{t('auction.place_bid')}
 			</h2>
@@ -69,10 +89,19 @@ const BidForm = () => {
 				</div>
 				<button
 					type="submit"
-					className="w-full px-4 py-2 text-white bg-indigo-600 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+					className="w-full px-4 py-2 text-white bg-indigo-600 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
+					disabled={loading}
 				>
-					{t('auction.place_bid')}
+					{loading ? (
+						<span className="flex items-center"><svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>{t('auction.place_bid')}...</span>
+					) : (
+						t('auction.place_bid')
+					)}
 				</button>
+				{optimisticSuccess && (
+					<div className="text-green-600 text-center mt-2">{t('auction.bid_success')}</div>
+				)}
+				{error && <div className="text-red-500 text-center mt-2">{error}</div>}
 			</form>
 		</div>
 	);
