@@ -27,7 +27,7 @@ function Profile() {
 			if (token) {
 				try {
 					const res = await axios.post(
-						"https://infonuagique.onrender.com/api/users/profile",
+						"/api/users/profile",
 						{},
 						{
 							headers: { Authorization: `Bearer ${token}` },
@@ -48,7 +48,7 @@ function Profile() {
 			if (token) {
 				try {
 					const res = await axios.post(
-						"https://infonuagique.onrender.com/api/auctions/user",
+						"/api/auctions/user",
 						{},
 						{
 							headers: { Authorization: `Bearer ${token}` },
@@ -72,7 +72,7 @@ function Profile() {
 			if (token) {
 				try {
 					const res = await axios.post(
-						"https://infonuagique.onrender.com/api/bids/user",
+						"/api/bids/user",
 						{},
 						{
 							headers: { Authorization: `Bearer ${token}` },
@@ -96,7 +96,7 @@ function Profile() {
 			if (token) {
 				try {
 					const res = await axios.post(
-						"https://infonuagique.onrender.com/api/auctions/won",
+						"/api/auctions/won",
 						{},
 						{
 							headers: { Authorization: `Bearer ${token}` },

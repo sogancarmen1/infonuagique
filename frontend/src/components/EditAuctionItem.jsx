@@ -16,7 +16,7 @@ const EditAuctionItem = () => {
 
 	useEffect(() => {
 		const fetchAuctionItem = async () => {
-			const res = await axios.get(`https://infonuagique.onrender.com/api/auctions/${id}`);
+			const res = await axios.get(`/api/auctions/${id}`);
 			setAuctionItem(res.data);
 		};
 		fetchAuctionItem();
@@ -32,7 +32,7 @@ const EditAuctionItem = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await axios.put(`https://infonuagique.onrender.com/api/auctions/${id}`, auctionItem);
+		await axios.put(`/api/auctions/${id}`, auctionItem);
 		navigate(`/auction/${id}`);
 	};
 

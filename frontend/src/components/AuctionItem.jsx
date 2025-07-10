@@ -25,7 +25,7 @@ function AuctionItem() {
 	useEffect(() => {
 		const fetchAuctionItem = async () => {
 			try {
-				const res = await axios.get(`https://infonuagique.onrender.com/api/auctions/${id}`);
+				const res = await axios.get(`/api/auctions/${id}`);
 				setAuctionItem(res.data);
 			} catch (error) {
 				console.error("Error fetching auction item:", error);
@@ -40,7 +40,7 @@ function AuctionItem() {
 			if (token) {
 				try {
 					const res = await axios.post(
-						"https://infonuagique.onrender.com/api/users/profile",
+						"/api/users/profile",
 						{},
 						{
 							headers: { Authorization: `Bearer ${token}` },
@@ -55,7 +55,7 @@ function AuctionItem() {
         
 		const fetchWinner = async () => {
 			try {
-				const res = await axios.get(`https://infonuagique.onrender.com/api/auctions/winner/${id}`);
+				const res = await axios.get(`/api/auctions/winner/${id}`);
 				setWinner(res.data.winner);
 			} catch (error) {
 				if (error.response?.data?.winner !== "") {
@@ -81,7 +81,7 @@ useEffect(() => {
                 headers: { Authorization: `Bearer ${token}` }
             } : {};
             
-            const res = await axios.get(`https://infonuagique.onrender.com/api/bids/${id}`, config);
+            const res = await axios.get(`/api/bids/${id}`, config);
             
             const sortedBids = res.data.sort(
                 (a, b) => b.bidAmount - a.bidAmount
@@ -153,7 +153,7 @@ useEffect(() => {
 
 	const handleDelete = async () => {
 		try {
-			await axios.delete(`https://infonuagique.onrender.com/api/auctions/${id}`);
+			await axios.delete(`/api/auctions/${id}`);
 			navigate("/auctions");
 		} catch (error) {
 			console.error("Error deleting auction item:", error);

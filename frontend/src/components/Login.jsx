@@ -15,30 +15,25 @@ function Login() {
 	const { isLoggedIn, login } = useAuth();
 	const { t } = useTranslation();
 
-	// useEffect(() => {
-	// 	if (isLoggedIn) {
-	// 		navigate("/profile");
-	// 	}
-	// }, [isLoggedIn, navigate]);
+	useEffect(() => {
+		if (isLoggedIn) {
+			navigate("/profile");
+		}
+	}, [isLoggedIn, navigate]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
 		setLoading(true);
 		try {
 			const res = await axios.post(
-				"https://infonuagique.onrender.com/api/users/login",
+				"/api/users/login",
 				{ email, password },
 				{ withCredentials: true }
 			);
-			if(res.status == 200) 
-			{			
-				console.log(res.data.token);
-				document.cookie = `jwt=${res.data.token}; path=/; max-age=86400; secure; sameSite=Strict`;
+			if (res.status === 200) {
+				login();
 				navigate("/profile");
 			}
-			// if (res.status === 200 || res.status === 204) {
-			// 	// login();
-			// }
 		} catch (err) {
 			setError(err.response?.data?.message || t("login.error"));
 			console.error(err);
@@ -50,10 +45,10 @@ function Login() {
 	return (
 		<div
 			className="flex items-center justify-center min-h-screen bg-gray-700 bg-cover bg-center"
-			// style={{
-			// 	backgroundImage:
-			// 		"url('https://source.unsplash.com/1600x900/?technology,login')",
-			// }}
+			style={{
+				backgroundImage:
+					"url('https://source.unsplash.com/1600x900/?technology,login')",
+			}}
 		>
 			<div className="w-full max-w-md p-8 bg-gray-800 bg-opacity-80 rounded-lg shadow-lg">
 				<h2 className="mb-6 text-3xl font-semibold text-white text-center">

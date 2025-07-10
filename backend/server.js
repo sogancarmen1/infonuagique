@@ -4,6 +4,7 @@ const connectDB = require("./config/db");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const router = express.Router();
+const path = require("path");
 
 dotenv.config();
 connectDB();
@@ -23,6 +24,12 @@ app.use(cookieParser());
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/auctions", require("./routes/auctionRoutes"));
 app.use("/api/bids", require("./routes/bidRoutes"));
+
+app.use(express.static(path.resolve(__dirname, "dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist/index.html"));
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
