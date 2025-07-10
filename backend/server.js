@@ -2,7 +2,6 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const cors = require("cors");
-const cookieParser = require("cookie-parser");
 const router = express.Router();
 const path = require("path");
 
@@ -10,7 +9,6 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.set("trust proxy", 1);
 app.use(express.json());
 app.use(
 	cors({
@@ -20,10 +18,11 @@ app.use(
 	})
 );
 app.use(router);
-app.use(cookieParser());
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/auctions", require("./routes/auctionRoutes"));
 app.use("/api/bids", require("./routes/bidRoutes"));
+
+require('./services/auctionScheduler').startAuctionScheduler();
 
 app.use(express.static(path.resolve(__dirname, "dist")));
 

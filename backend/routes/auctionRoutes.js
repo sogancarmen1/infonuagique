@@ -1,4 +1,3 @@
-
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
@@ -13,6 +12,8 @@ const {
 	getAuctionItemsByUser,
 	getAuctionWinner,
 	getAuctionsWonByUser,
+	forceEndAuction,
+	forceEndAllAuctionsForUser,
 } = require("../controllers/auctionController");
 const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
@@ -21,6 +22,8 @@ router.route("/").get(getAuctionItems).post(authMiddleware,upload.single("image"
 router.post("/user", authMiddleware, getAuctionItemsByUser);
 router.get("/winner/:id", getAuctionWinner);
 router.post("/won", authMiddleware, getAuctionsWonByUser);
+router.post("/force-end/:id", forceEndAuction);
+router.post("/force-end-all/:userId", forceEndAllAuctionsForUser);
 
 router
 	.route("/:id")

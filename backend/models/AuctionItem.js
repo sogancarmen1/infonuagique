@@ -35,6 +35,15 @@ const auctionItemSchema = mongoose.Schema({
 		type: Date,
 		default: new Date(new Date().getTime()),
 	},
+	winner: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
+		default: null,
+	},
+	ended: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 module.exports = mongoose.model("AuctionItem", auctionItemSchema);
