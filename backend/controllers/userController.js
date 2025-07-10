@@ -1,6 +1,9 @@
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const AuctionItem = require('../models/AuctionItem');
+const Bid = require('../models/Bid');
 
 const registerUser = async (req, res) => {
 	const { username, email, password, confirmPassword } = req.body;
@@ -35,7 +38,11 @@ const registerUser = async (req, res) => {
 			email: user.email,
 		});
 	} catch (error) {
-		res.status(500).json({ message: error.message });
+		if (error.code === 11000 && error.keyPattern && error.keyPattern.username) {
+			// Duplicate username error
+			return res.status(400).json({ message: "This username is already taken. Please choose another." });
+		}
+		res.status(500).json({ message: "Server error during registration." });
 	}
 };
 
